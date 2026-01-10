@@ -9,7 +9,7 @@
     margin: 0;
     height: 100vh;
     background: linear-gradient(135deg, #ff5f9e, #ffc371);
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -17,37 +17,42 @@
     position: relative;
   }
 
+  /* Password lock */
   #lock { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10; }
   .lock-box { background: rgba(0,0,0,.35); padding: 30px; border-radius: 20px; text-align: center; color: white; }
   .lock-box input { padding: 12px; border-radius: 20px; border: none; outline: none; }
   .lock-box button { margin-top: 15px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
-  
+
+  /* Main content */
   #content { display: none; text-align: center; color: white; z-index: 1; position: relative; }
   h1 { font-size: 2em; margin-bottom: 10px; }
   #surprise { margin-top: 20px; padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer; background: #fff; color: #ff5f9e; font-weight: bold; }
 
-  /* Heart styles */
+  /* Confetti canvas */
+  canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
+
+  /* Hearts */
   .heart {
-    position: absolute;
+    position: fixed;
     font-size: 20px;
     color: red;
-    animation: floatUp 4s linear forwards;
-    z-index: 5;
     user-select: none;
     pointer-events: none;
+    z-index: 10;
+    opacity: 1;
+    transform: translateY(0);
+    animation-name: floatUp;
+    animation-timing-function: linear;
   }
-
   @keyframes floatUp {
     0% { transform: translateY(0) scale(1); opacity:1; }
     100% { transform: translateY(-600px) scale(1.2); opacity:0; }
   }
-
-  /* Confetti canvas */
-  canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
 </style>
 </head>
 <body>
 
+<!-- Password Lock -->
 <div id="lock">
   <div class="lock-box">
     <h2>Enter Password</h2>
@@ -58,13 +63,17 @@
   </div>
 </div>
 
+<!-- Birthday Content -->
 <div id="content">
   <h1>Happy Birthday, Nanu 🎂❤️</h1>
   <p>Your emotional lines will go here 💕</p>
   <button id="surprise" onclick="startSurprise()">Tap for surprise 🎉</button>
 </div>
 
+<!-- Audio -->
 <audio id="music" src="YOUR_MP3_URL_HERE"></audio>
+
+<!-- Confetti Canvas -->
 <canvas id="confetti"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -135,19 +144,23 @@ function startConfetti() {
 
 // ----- Floating Hearts -----
 function startHearts() {
-  const totalHearts = 25; // number of hearts
-  for(let i=0; i<totalHearts; i++){
+  let heartsCreated = 0;
+  const interval = setInterval(() => {
     const heart = document.createElement('div');
     heart.className = 'heart';
     heart.innerText = '❤️';
-    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.left = Math.random() * (window.innerWidth - 30) + 'px';
     heart.style.fontSize = (14 + Math.random()*20) + 'px';
-    heart.style.animationDuration = (3 + Math.random()*3) + 's';
+    heart.style.animationDuration = (3 + Math.random()*2) + 's';
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
-  }
+    setTimeout(() => heart.remove(), 5000);
+
+    heartsCreated++;
+    if(heartsCreated >= 30) clearInterval(interval);
+  }, 150);
 }
 
+// Resize canvas on window change
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
