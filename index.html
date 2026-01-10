@@ -10,20 +10,40 @@
     height: 100vh;
     background: linear-gradient(135deg, #ff5f9e, #ffc371);
     font-family: 'Arial', sans-serif;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     position: relative;
   }
+
   #lock { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10; }
   .lock-box { background: rgba(0,0,0,.35); padding: 30px; border-radius: 20px; text-align: center; color: white; }
   .lock-box input { padding: 12px; border-radius: 20px; border: none; outline: none; }
   .lock-box button { margin-top: 15px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
+  
   #content { display: none; text-align: center; color: white; z-index: 1; position: relative; }
   h1 { font-size: 2em; margin-bottom: 10px; }
   #surprise { margin-top: 20px; padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer; background: #fff; color: #ff5f9e; font-weight: bold; }
-  canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  /* Heart styles */
+  .heart {
+    position: absolute;
+    font-size: 20px;
+    color: red;
+    animation: floatUp 4s linear forwards;
+    z-index: 5;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity:1; }
+    100% { transform: translateY(-600px) scale(1.2); opacity:0; }
+  }
+
+  /* Confetti canvas */
+  canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
 </style>
 </head>
 <body>
@@ -45,10 +65,12 @@
 </div>
 
 <audio id="music" src="YOUR_MP3_URL_HERE"></audio>
-
 <canvas id="confetti"></canvas>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
 <script>
+// Password unlock
 function unlock() {
   const pass = document.getElementById('password').value;
   if(pass.toLowerCase() === 'i love you'){
@@ -59,13 +81,16 @@ function unlock() {
   }
 }
 
+// Surprise button: play music + confetti + hearts
 function startSurprise() {
   const audio = document.getElementById('music');
   audio.play();
+
   startConfetti();
+  startHearts();
 }
 
-// ---- Confetti animation ----
+// ----- Confetti -----
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -88,9 +113,9 @@ function createParticles(num) {
   }
 }
 
-function draw() {
+function drawConfetti() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  confettiParticles.forEach((p, index) => {
+  confettiParticles.forEach(p => {
     ctx.fillStyle = p.color;
     ctx.fillRect(p.x, p.y, p.size, p.size);
     p.y += p.speedY;
@@ -100,12 +125,27 @@ function draw() {
       p.x = Math.random() * canvas.width;
     }
   });
-  requestAnimationFrame(draw);
+  requestAnimationFrame(drawConfetti);
 }
 
 function startConfetti() {
-  createParticles(150); // number of confetti
-  draw();
+  createParticles(150);
+  drawConfetti();
+}
+
+// ----- Floating Hearts -----
+function startHearts() {
+  const totalHearts = 25; // number of hearts
+  for(let i=0; i<totalHearts; i++){
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerText = '❤️';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (14 + Math.random()*20) + 'px';
+    heart.style.animationDuration = (3 + Math.random()*3) + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 4000);
+  }
 }
 
 window.addEventListener('resize', () => {
