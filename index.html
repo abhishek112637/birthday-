@@ -1,145 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Nanu 💖</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3em;
-      margin: 0.2em;
-    }
-    p {
-      font-size: 1.2em;
-      max-width: 90%;
-    }
-    #hearts {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .heart {
-      position: absolute;
-      font-size: 24px;
-      animation: float 5s linear infinite;
-    }
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); opacity:1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity:0; }
-    }
-    #lock {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.4);
-      flex-direction: column;
-      z-index: 10;
-    }
-    #lock input {
-      padding: 12px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 10px;
-    }
-    #lock button {
-      padding: 12px 20px;
-      font-size: 1em;
-      border: none;
-      border-radius: 8px;
-      background: #ff6f91;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Nanu 💖</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff5f9e, #ffc371);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  #lock { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10; }
+  .lock-box { background: rgba(0,0,0,.35); padding: 30px; border-radius: 20px; text-align: center; color: white; }
+  .lock-box input { padding: 12px; border-radius: 20px; border: none; outline: none; }
+  .lock-box button { margin-top: 15px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
+  #content { display: none; text-align: center; color: white; z-index: 1; position: relative; }
+  h1 { font-size: 2em; margin-bottom: 10px; }
+  #surprise { margin-top: 20px; padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer; background: #fff; color: #ff5f9e; font-weight: bold; }
+  canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+</style>
 </head>
 <body>
 
-  <!-- Hearts Container -->
-  <div id="hearts"></div>
-
-  <!-- Birthday Text -->
-  <h1>Happy Birthday, Nanu 🎂❤️</h1>
-  <p>Dear Nanu 💕 (Your emotional lines will go here) (You can edit this anytime)</p>
-
-  <!-- Surprise Button -->
-  <button id="surpriseBtn">Tap for surprise 🎉</button>
-
-  <!-- Password Lock -->
-  <div id="lock">
-    <input type="password" id="password" placeholder="Enter password">
-    <button id="unlock">Unlock Surprise</button>
+<div id="lock">
+  <div class="lock-box">
+    <h2>Enter Password</h2>
+    <input type="password" id="password" placeholder="Password">
+    <br>
+    <button onclick="unlock()">Unlock</button>
+    <p id="error" style="color:#ffd6e8"></p>
   </div>
+</div>
 
-  <!-- Music -->
-  <audio id="birthdaySong" src="https://github.com/YOURUSERNAME/birthday/raw/main/happybirthday.mp3"></audio>
+<div id="content">
+  <h1>Happy Birthday, Nanu 🎂❤️</h1>
+  <p>Your emotional lines will go here 💕</p>
+  <button id="surprise" onclick="startSurprise()">Tap for surprise 🎉</button>
+</div>
 
-  <!-- Confetti Library -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<audio id="music" src="YOUR_MP3_URL_HERE"></audio>
 
-  <script>
-    // Password check
-    const lock = document.getElementById('lock');
-    const unlockBtn = document.getElementById('unlock');
-    unlockBtn.addEventListener('click', () => {
-      const pass = document.getElementById('password').value;
-      if(pass.toLowerCase() === 'i love you'){
-        lock.style.display = 'none';
-      } else {
-        alert('Wrong password!');
-      }
-    });
+<canvas id="confetti"></canvas>
 
-    // Hearts animation
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = (12 + Math.random()*20) + 'px';
-      heart.innerText = '❤️';
-      document.getElementById('hearts').appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
+<script>
+function unlock() {
+  const pass = document.getElementById('password').value;
+  if(pass.toLowerCase() === 'i love you'){
+    document.getElementById('lock').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  } else {
+    document.getElementById('error').innerText = 'Wrong password!';
+  }
+}
+
+function startSurprise() {
+  const audio = document.getElementById('music');
+  audio.play();
+  startConfetti();
+}
+
+// ---- Confetti animation ----
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confettiParticles = [];
+
+function ConfettiParticle() {
+  this.x = Math.random() * canvas.width;
+  this.y = Math.random() * canvas.height - canvas.height;
+  this.size = 5 + Math.random() * 10;
+  this.speedY = 2 + Math.random() * 3;
+  this.speedX = (Math.random() - 0.5) * 2;
+  this.color = `hsl(${Math.random()*360}, 100%, 50%)`;
+}
+
+function createParticles(num) {
+  for(let i=0; i<num; i++){
+    confettiParticles.push(new ConfettiParticle());
+  }
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  confettiParticles.forEach((p, index) => {
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, p.size, p.size);
+    p.y += p.speedY;
+    p.x += p.speedX;
+    if(p.y > canvas.height) {
+      p.y = -10;
+      p.x = Math.random() * canvas.width;
     }
-    setInterval(createHeart, 300);
+  });
+  requestAnimationFrame(draw);
+}
 
-    // Surprise Button
-    const btn = document.getElementById('surpriseBtn');
-    const song = document.getElementById('birthdaySong');
-    btn.addEventListener('click', () => {
-      song.play().catch(() => console.log('Tap to allow music!'));
+function startConfetti() {
+  createParticles(150); // number of confetti
+  draw();
+}
 
-      const duration = 5 * 1000; // 5 seconds confetti
-      const end = Date.now() + duration;
-      (function frame() {
-        confetti({
-          particleCount: 6,
-          startVelocity: 30,
-          spread: 60,
-          origin: { x: Math.random(), y: Math.random() - 0.2 }
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-    });
-  </script>
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
