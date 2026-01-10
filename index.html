@@ -15,6 +15,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    color: white;
   }
 
   /* Password lock */
@@ -24,21 +25,30 @@
   .lock-box button { margin-top: 15px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
 
   /* Main content */
-  #content { display: none; text-align: center; color: white; z-index: 1; position: relative; }
-  h1 { font-size: 2em; margin-bottom: 10px; }
+  #content { display: none; text-align: center; z-index: 1; position: relative; }
+  h1 {
+    font-size: 2.5em; 
+    margin-bottom: 10px; 
+    animation: pop 1s ease forwards;
+  }
+  @keyframes pop {
+    0% { transform: scale(0); opacity:0; }
+    100% { transform: scale(1); opacity:1; }
+  }
+
   #surprise { margin-top: 20px; padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer; background: #fff; color: #ff5f9e; font-weight: bold; }
 
   /* Confetti canvas */
   canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
 
-  /* Hearts */
+  /* Floating Hearts */
   .heart {
     position: fixed;
     font-size: 20px;
     color: red;
     user-select: none;
     pointer-events: none;
-    z-index: 10;
+    z-index: 5;
     opacity: 1;
     transform: translateY(0);
     animation-name: floatUp;
@@ -46,7 +56,7 @@
   }
   @keyframes floatUp {
     0% { transform: translateY(0) scale(1); opacity:1; }
-    100% { transform: translateY(-600px) scale(1.2); opacity:0; }
+    100% { transform: translateY(-1000px) scale(1.5); opacity:0; }
   }
 </style>
 </head>
@@ -66,18 +76,14 @@
 <!-- Birthday Content -->
 <div id="content">
   <h1>Happy Birthday, Nanu 🎂❤️</h1>
-  <p>Your emotional lines will go here 💕</p>
+  <p>Your emotional lines go here 💕</p>
   <button id="surprise" onclick="startSurprise()">Tap for surprise 🎉</button>
 </div>
-
-<!-- Audio -->
-<audio id="music" src="https://raw.githubusercontent.com/Skull-Crusher/your-repo-name/Main/a-cheerful-ukulele-waltz.mp3" loop></audio>
 
 <!-- Confetti Canvas -->
 <canvas id="confetti"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
 <script>
 // Password unlock
 function unlock() {
@@ -85,18 +91,15 @@ function unlock() {
   if(pass.toLowerCase() === 'i love you'){
     document.getElementById('lock').style.display = 'none';
     document.getElementById('content').style.display = 'block';
+    startHearts(); // start hearts immediately after unlock
   } else {
     document.getElementById('error').innerText = 'Wrong password!';
   }
 }
 
-// Surprise button: play music + confetti + hearts
+// Surprise button: start confetti
 function startSurprise() {
-  const audio = document.getElementById('music');
-  audio.play().catch(() => console.log("Autoplay blocked"));
-
   startConfetti();
-  startHearts();
 }
 
 // ----- Confetti -----
@@ -104,7 +107,6 @@ const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
 let confettiParticles = [];
 
 function ConfettiParticle() {
@@ -144,28 +146,23 @@ function startConfetti() {
 
 // ----- Floating Hearts -----
 function startHearts() {
-  let heartsCreated = 0;
-  const interval = setInterval(() => {
+  setInterval(() => {
     const heart = document.createElement('div');
     heart.className = 'heart';
     heart.innerText = '❤️';
     heart.style.left = Math.random() * (window.innerWidth - 30) + 'px';
     heart.style.fontSize = (14 + Math.random()*20) + 'px';
-    heart.style.animationDuration = (3 + Math.random()*2) + 's';
+    heart.style.animationDuration = (4 + Math.random()*3) + 's';
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
-
-    heartsCreated++;
-    if(heartsCreated >= 30) clearInterval(interval);
-  }, 150);
+  }, 200); // creates a new heart every 0.2s
 }
 
-// Resize canvas on window change
+// Resize canvas
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 </script>
-
 </body>
 </html>
