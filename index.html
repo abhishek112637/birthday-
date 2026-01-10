@@ -1,116 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>For Nanu ❤️</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-    margin:0;height:100vh;
-    background:linear-gradient(135deg,#ff5f9e,#ffc371);
-    font-family:'Segoe UI',sans-serif;
-    overflow:hidden;color:white
-}
-#lock{position:fixed;inset:0;display:flex;justify-content:center;align-items:center}
-.lock-box{background:rgba(0,0,0,.35);padding:30px;border-radius:20px;text-align:center;animation:fadeIn 1.5s}
-.lock-box input{padding:12px;border-radius:20px;border:none;outline:none;width:220px;text-align:center}
-.lock-box button{margin-top:15px;padding:10px 25px;border:none;border-radius:20px;background:#fff;color:#ff5f9e;font-weight:bold}
-#error{margin-top:10px;color:#ffd6e8}
-
-#content{display:none;height:100vh;display:flex;justify-content:center;align-items:center}
-.container{text-align:center;padding:20px;animation:zoomIn 1.5s}
-h1{font-size:2.6rem}
-#text{font-size:1.2rem;line-height:1.6;min-height:140px}
-button.surprise{margin-top:20px;padding:12px 25px;border:none;border-radius:25px;background:#fff;color:#ff5f9e;font-weight:bold}
-
-.heart{position:fixed;bottom:-10px;animation:float 6s linear infinite}
-.confetti{position:fixed;top:-10px;width:8px;height:8px;animation:fall 4s linear infinite}
-
-@keyframes float{from{transform:translateY(0);opacity:1}to{transform:translateY(-100vh);opacity:0}}
-@keyframes fall{from{transform:translateY(0)}to{transform:translateY(100vh)}}
-@keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-@keyframes zoomIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Nanu 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin: 0.2em;
+    }
+    p {
+      font-size: 1.2em;
+      max-width: 90%;
+    }
+    #hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: float 5s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity:1; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity:0; }
+    }
+    #lock {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      flex-direction: column;
+      z-index: 10;
+    }
+    #lock input {
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+    #lock button {
+      padding: 12px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background: #ff6f91;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- PASSWORD SCREEN -->
-<div id="lock">
-  <div class="lock-box">
-    <h2>For Nanu 💖<br>Enter the secret words</h2>
-    <input type="password" id="password" placeholder="hint: 3 words 😉">
-    <br>
-    <button onclick="unlock()">Unlock ❤️</button>
-    <div id="error"></div>
+  <!-- Hearts Container -->
+  <div id="hearts"></div>
+
+  <!-- Birthday Text -->
+  <h1>Happy Birthday, Nanu 🎂❤️</h1>
+  <p>Dear Nanu 💕 (Your emotional lines will go here) (You can edit this anytime)</p>
+
+  <!-- Surprise Button -->
+  <button id="surpriseBtn">Tap for surprise 🎉</button>
+
+  <!-- Password Lock -->
+  <div id="lock">
+    <input type="password" id="password" placeholder="Enter password">
+    <button id="unlock">Unlock Surprise</button>
   </div>
-</div>
 
-<!-- MAIN CONTENT -->
-<div id="content">
-  <div class="container">
-    <h1>Happy Birthday, Nanu 🎂❤️</h1>
-    <div id="text"></div>
-    <button class="surprise" onclick="startSurprise()">Tap for surprise 🎉</button>
-  </div>
-</div>
+  <!-- Music -->
+  <audio id="birthdaySong" src="https://github.com/YOURUSERNAME/birthday/raw/main/happybirthday.mp3"></audio>
 
-<!-- HAPPY BIRTHDAY SONG -->
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c4c6b2b7d.mp3?filename=happy-birthday-to-you-126305.mp3" type="audio/mpeg">
-</audio>
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
-<script>
-function unlock(){
-  const pass=document.getElementById("password").value;
-  if(pass==="i love you"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("content").style.display="flex";
-    typeText();
-  }else{
-    document.getElementById("error").innerText="Almost… try again ❤️";
-  }
-}
+  <script>
+    // Password check
+    const lock = document.getElementById('lock');
+    const unlockBtn = document.getElementById('unlock');
+    unlockBtn.addEventListener('click', () => {
+      const pass = document.getElementById('password').value;
+      if(pass.toLowerCase() === 'i love you'){
+        lock.style.display = 'none';
+      } else {
+        alert('Wrong password!');
+      }
+    });
 
-/* ✍️ EDIT YOUR EMOTIONAL MESSAGE HERE LATER */
-const message=
-`Dear Nanu 💕
-(Your emotional lines will go here)
-(You can edit this anytime)
-Happy Birthday ❤️`;
+    // Hearts animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (12 + Math.random()*20) + 'px';
+      heart.innerText = '❤️';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
 
-let i=0;
-function typeText(){
-  if(i<message.length){
-    document.getElementById("text").innerHTML+=message.charAt(i);
-    i++; setTimeout(typeText,40);
-  }
-}
+    // Surprise Button
+    const btn = document.getElementById('surpriseBtn');
+    const song = document.getElementById('birthdaySong');
+    btn.addEventListener('click', () => {
+      song.play().catch(() => console.log('Tap to allow music!'));
 
-/* HEARTS */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart"; h.innerHTML="❤️";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=Math.random()*20+15+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},300);
-
-/* CONFETTI + MUSIC */
-function startSurprise(){
-  document.getElementById("music").play();
-  for(let i=0;i<60;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),4000);
-  }
-}
-</script>
+      const duration = 5 * 1000; // 5 seconds confetti
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({
+          particleCount: 6,
+          startVelocity: 30,
+          spread: 60,
+          origin: { x: Math.random(), y: Math.random() - 0.2 }
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    });
+  </script>
 
 </body>
 </html>
