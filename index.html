@@ -71,7 +71,7 @@
 </div>
 
 <!-- Audio -->
-<audio id="music" src="YOUR_MP3_URL_HERE"></audio>
+<audio id="music" src="https://raw.githubusercontent.com/Skull-Crusher/your-repo-name/Main/a-cheerful-ukulele-waltz.mp3" loop></audio>
 
 <!-- Confetti Canvas -->
 <canvas id="confetti"></canvas>
@@ -93,7 +93,7 @@ function unlock() {
 // Surprise button: play music + confetti + hearts
 function startSurprise() {
   const audio = document.getElementById('music');
-  audio.play();
+  audio.play().catch(() => console.log("Autoplay blocked"));
 
   startConfetti();
   startHearts();
