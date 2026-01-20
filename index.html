@@ -4,165 +4,201 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Nanu 💖</title>
+
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff5f9e, #ffc371);
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    color: white;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff5f9e, #ffc371);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-  /* Password lock */
-  #lock { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10; }
-  .lock-box { background: rgba(0,0,0,.35); padding: 30px; border-radius: 20px; text-align: center; color: white; }
-  .lock-box input { padding: 12px; border-radius: 20px; border: none; outline: none; }
-  .lock-box button { margin-top: 15px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; }
+.container {
+  background: rgba(255,255,255,0.95);
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
 
-  /* Main content */
-  #content { display: none; text-align: center; z-index: 1; position: relative; }
-  h1 {
-    font-size: 2.5em; 
-    margin-bottom: 10px; 
-    animation: pop 1s ease forwards;
-  }
-  @keyframes pop {
-    0% { transform: scale(0); opacity:0; }
-    100% { transform: scale(1); opacity:1; }
-  }
+h1, h2 {
+  color: #ff4081;
+}
 
-  #surprise { margin-top: 20px; padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer; background: #fff; color: #ff5f9e; font-weight: bold; }
+button {
+  background: #ff4081;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 8px;
+}
 
-  /* Confetti canvas */
-  canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
+button:hover {
+  background: #e73370;
+}
 
-  /* Floating Hearts */
-  .heart {
-    position: fixed;
-    font-size: 20px;
-    color: red;
-    user-select: none;
-    pointer-events: none;
-    z-index: 5;
-    opacity: 1;
-    transform: translateY(0);
-    animation-name: floatUp;
-    animation-timing-function: linear;
-  }
-  @keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity:1; }
-    100% { transform: translateY(-1000px) scale(1.5); opacity:0; }
-  }
+input {
+  padding: 10px;
+  width: 80%;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+  color: #ff4081;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-110vh); opacity: 0; }
+}
 </style>
 </head>
+
 <body>
 
-<!-- Password Lock -->
-<div id="lock">
-  <div class="lock-box">
-    <h2>Enter Password</h2>
-    <input type="password" id="password" placeholder="Password">
-    <br>
-    <button onclick="unlock()">Unlock</button>
-    <p id="error" style="color:#ffd6e8"></p>
-  </div>
+<!-- PASSWORD -->
+<div class="container" id="lock">
+  <h2>🔒 Enter Password</h2>
+  <p>(Hint: something I always say)</p>
+  <input type="password" id="password">
+  <br><br>
+  <button onclick="checkPass()">Unlock 💖</button>
 </div>
 
-<!-- Birthday Content -->
-<div id="content">
-  <h1>Happy Birthday, Nanu 🎂❤️</h1>
-  <p>Your emotional lines go here 💕</p>
-  <button id="surprise" onclick="startSurprise()">Tap for surprise 🎉</button>
+<!-- LOADING -->
+<div class="container hidden" id="loading">
+  <h2>Loading your surprise…</h2>
+  <p id="loadText">Fetching love 💕</p>
 </div>
 
-<!-- Confetti Canvas -->
-<canvas id="confetti"></canvas>
+<!-- QUIZ -->
+<div class="container hidden" id="quiz">
+  <h2>Before we continue… 💌</h2>
+  <p>What do I call you the most?</p>
+  <button onclick="nextStep('quiz2')">Nanu 💖</button>
+  <button onclick="nextStep('quiz2')">Baby</button>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<div class="container hidden" id="quiz2">
+  <h2>One more 😌</h2>
+  <p>Our favorite thing?</p>
+  <button onclick="nextStep('mem1')">Talking endlessly 🥹</button>
+  <button onclick="nextStep('mem1')">Fighting 😂</button>
+</div>
+
+<!-- MEMORY PATH -->
+<div class="container hidden" id="mem1">
+  <p>When I first realized you matter to me…  
+  everything felt calmer.</p>
+  <button onclick="nextStep('mem2')">Next ➡️</button>
+</div>
+
+<div class="container hidden" id="mem2">
+  <p>You are not just special today.  
+  You are special to me every day.</p>
+  <button onclick="nextStep('mem3')">Next ➡️</button>
+</div>
+
+<div class="container hidden" id="mem3">
+  <p>No matter how hard things get…  
+  I’m always here.</p>
+  <button onclick="nextStep('choice')">Next ➡️</button>
+</div>
+
+<!-- CHOICE -->
+<div class="container hidden" id="choice">
+  <h2>Choose what you want first 👀</h2>
+  <button onclick="nextStep('final')">💌 A message</button>
+  <button onclick="nextStep('final')">🎵 A song</button>
+  <button onclick="nextStep('final')">🎁 Surprise</button>
+</div>
+
+<!-- FINAL -->
+<div class="container hidden" id="final">
+  <h1>🎂 Happy Birthday Nanu 💖</h1>
+  <p>
+    I may not be there with you today,  
+    but my heart is right next to you.  
+    Thank you for existing.  
+    Thank you for being *you*.
+  </p>
+  <p><b>I love you. Always.</b></p>
+
+  <!-- MUSIC -->
+  <audio autoplay loop>
+    <source src="a-cheerful-ukulele-waltz.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
 <script>
-// Password unlock
-function unlock() {
-  const pass = document.getElementById('password').value;
-  if(pass.toLowerCase() === 'i love you'){
-    document.getElementById('lock').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    startHearts(); // start hearts immediately after unlock
+function checkPass() {
+  const pass = document.getElementById("password").value;
+  if (pass.toLowerCase() === "i love you") {
+    show("loading");
+    fakeLoad();
   } else {
-    document.getElementById('error').innerText = 'Wrong password!';
+    alert("Wrong password 😜");
   }
 }
 
-// Surprise button: start confetti
-function startSurprise() {
-  startConfetti();
+function show(id) {
+  document.querySelectorAll(".container").forEach(c => c.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 
-// ----- Confetti -----
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let confettiParticles = [];
-
-function ConfettiParticle() {
-  this.x = Math.random() * canvas.width;
-  this.y = Math.random() * canvas.height - canvas.height;
-  this.size = 5 + Math.random() * 10;
-  this.speedY = 2 + Math.random() * 3;
-  this.speedX = (Math.random() - 0.5) * 2;
-  this.color = `hsl(${Math.random()*360}, 100%, 50%)`;
-}
-
-function createParticles(num) {
-  for(let i=0; i<num; i++){
-    confettiParticles.push(new ConfettiParticle());
-  }
-}
-
-function drawConfetti() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  confettiParticles.forEach(p => {
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, p.size, p.size);
-    p.y += p.speedY;
-    p.x += p.speedX;
-    if(p.y > canvas.height) {
-      p.y = -10;
-      p.x = Math.random() * canvas.width;
+function fakeLoad() {
+  const texts = [
+    "Fetching love 💕",
+    "Adding hugs 🤗",
+    "Packing kisses 😘",
+    "Almost there 💖"
+  ];
+  let i = 0;
+  const interval = setInterval(() => {
+    document.getElementById("loadText").innerText = texts[i];
+    i++;
+    if (i === texts.length) {
+      clearInterval(interval);
+      setTimeout(() => show("quiz"), 800);
     }
-  });
-  requestAnimationFrame(drawConfetti);
+  }, 900);
 }
 
-function startConfetti() {
-  createParticles(150);
-  drawConfetti();
+function nextStep(id) {
+  show(id);
 }
 
-// ----- Floating Hearts -----
-function startHearts() {
-  setInterval(() => {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.innerText = '❤️';
-    heart.style.left = Math.random() * (window.innerWidth - 30) + 'px';
-    heart.style.fontSize = (14 + Math.random()*20) + 'px';
-    heart.style.animationDuration = (4 + Math.random()*3) + 's';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 5000);
-  }, 200); // creates a new heart every 0.2s
-}
-
-// Resize canvas
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+// Hearts
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = (15 + Math.random() * 20) + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
+}, 400);
 </script>
+
 </body>
 </html>
