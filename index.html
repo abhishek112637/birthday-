@@ -4,281 +4,200 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Nanu 💖</title>
+
 <style>
-  /* General Reset */
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff5f9e, #ffc371);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-  body {
-    background: linear-gradient(135deg, #ff5f9e, #ffc371);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+.container {
+  background: rgba(255,255,255,0.95);
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
 
-  /* Landing Screen */
-  #landing {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    color: white;
-    text-align: center;
-  }
-  #landing h1 {
-    font-size: 3rem;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-    animation: float 3s ease-in-out infinite;
-  }
-  #landing p {
-    margin-top: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    text-decoration: underline;
-  }
+h1, h2 {
+  color: #ff4081;
+}
 
-  /* Floating Heart Animation */
-  .heart {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    transform: rotate(45deg);
-    animation: floatHearts 6s linear infinite;
-    opacity: 0.8;
-  }
-  .heart::before,
-  .heart::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    border-radius: 50%;
-  }
-  .heart::before { top: -10px; left: 0; }
-  .heart::after { left: 10px; top: 0; }
+button {
+  background: #ff4081;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 8px;
+}
 
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-  @keyframes floatHearts {
-    0% { transform: translateY(0) scale(1); opacity:1; }
-    100% { transform: translateY(-100vh) scale(1.5); opacity:0; }
-  }
+button:hover {
+  background: #e73370;
+}
 
-  /* Sections */
-  section {
-    width: 100%;
-    min-height: 100vh;
-    padding: 50px;
-    text-align: center;
-    color: white;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+input {
+  padding: 10px;
+  width: 80%;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
 
-  /* Slideshow */
-  .slideshow {
-    position: relative;
-    width: 80%;
-    max-width: 600px;
-    height: 350px;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    margin-bottom: 30px;
-  }
-  .slide {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
-    transition: opacity 1s;
-  }
-  .slide.active { opacity: 1; }
+.hidden {
+  display: none;
+}
 
-  /* Buttons */
-  button {
-    padding: 10px 20px;
-    background: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #ff5f9e;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-  button:hover { background: #ffe3e3; }
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+  color: #ff4081;
+}
 
-  /* Secret Message */
-  #secretMsg {
-    display: none;
-    font-size: 1.8rem;
-    margin-top: 20px;
-    color: #ffe3e3;
-  }
-
-  /* Countdown */
-  #countdown {
-    font-size: 2rem;
-    margin-top: 20px;
-    color: #fff;
-  }
-
+@keyframes float {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-110vh); opacity: 0; }
+}
 </style>
 </head>
+
 <body>
 
-<!-- Landing Screen -->
-<div id="landing">
-  <h1>Happy Birthday Nanu 💖</h1>
-  <p id="enterBtn">Click to Enter</p>
+<!-- PASSWORD -->
+<div class="container" id="lock">
+  <h2>🔒 Enter Password</h2>
+  <p>(Hint: something I always say)</p>
+  <input type="password" id="password">
+  <br><br>
+  <button onclick="checkPass()">Unlock 💖</button>
 </div>
 
-<!-- Section 1: Slideshow -->
-<section id="section1">
-  <h2>Our Memories</h2>
-  <div class="slideshow">
-    <img src="https://via.placeholder.com/600x350?text=Memory+1" class="slide active">
-    <img src="https://via.placeholder.com/600x350?text=Memory+2" class="slide">
-    <img src="https://via.placeholder.com/600x350?text=Memory+3" class="slide">
-  </div>
-  <button id="nextSlide">Next Photo</button>
-</section>
+<!-- LOADING -->
+<div class="container hidden" id="loading">
+  <h2>Loading your surprise…</h2>
+  <p id="loadText">Fetching love 💕</p>
+</div>
 
-<!-- Section 2: Voice Surprise -->
-<section id="section2">
-  <h2>Listen to My Surprise</h2>
-  <audio id="voiceMsg" controls>
-    <source src="your_voice.mp3" type="audio/mpeg">
-    Your browser does not support audio.
+<!-- QUIZ -->
+<div class="container hidden" id="quiz">
+  <h2>Before we continue… 💌</h2>
+  <p>What do I call you the most?</p>
+  <button onclick="nextStep('quiz2')">Nanu 💖</button>
+  <button onclick="nextStep('quiz2')">Baby</button>
+</div>
+
+<div class="container hidden" id="quiz2">
+  <h2>One more 😌</h2>
+  <p>Our favorite thing?</p>
+  <button onclick="nextStep('mem1')">Talking endlessly 🥹</button>
+  <button onclick="nextStep('mem1')">Fighting 😂</button>
+</div>
+
+<!-- MEMORY PATH -->
+<div class="container hidden" id="mem1">
+  <p>When I first realized you matter to me…  
+  everything felt calmer.</p>
+  <button onclick="nextStep('mem2')">Next ➡️</button>
+</div>
+
+<div class="container hidden" id="mem2">
+  <p>You are not just special today.  
+  You are special to me every day.</p>
+  <button onclick="nextStep('mem3')">Next ➡️</button>
+</div>
+
+<div class="container hidden" id="mem3">
+  <p>No matter how hard things get…  
+  I’m always here.</p>
+  <button onclick="nextStep('choice')">Next ➡️</button>
+</div>
+
+<!-- CHOICE -->
+<div class="container hidden" id="choice">
+  <h2>Choose what you want first 👀</h2>
+  <button onclick="nextStep('final')">💌 A message</button>
+  <button onclick="nextStep('final')">🎵 A song</button>
+  <button onclick="nextStep('final')">🎁 Surprise</button>
+</div>
+
+<!-- FINAL -->
+<div class="container hidden" id="final">
+  <h1>🎂 Happy Birthday Nanu 💖</h1>
+  <p>
+    I may not be there with you today,  
+    but my heart is right next to you.  
+    Thank you for existing.  
+    Thank you for being *you*.
+  </p>
+  <p><b>I love you. Always.</b></p>
+
+  <!-- MUSIC -->
+  <audio autoplay loop>
+    <source src="a-cheerful-ukulele-waltz.mp3" type="audio/mpeg">
   </audio>
-</section>
-
-<!-- Section 3: Pop Balloons -->
-<section id="section3">
-  <h2>Pop the Balloons!</h2>
-  <p>Click balloons to reveal messages 🎈</p>
-  <div id="balloonsContainer"></div>
-</section>
-
-<!-- Section 4: Secret Message -->
-<section id="section4">
-  <h2>Unlock My Secret Message</h2>
-  <input type="password" id="pwdInput" placeholder="Enter password">
-  <button id="unlockBtn">Unlock</button>
-  <div id="secretMsg">No matter where life takes us, you'll always have my heart ❤️</div>
-</section>
-
-<!-- Section 5: Countdown -->
-<section id="section5">
-  <h2>Countdown to Our Next Special Moment</h2>
-  <div id="countdown"></div>
-  <button id="celebrateBtn">Celebrate 🎉</button>
-</section>
+</div>
 
 <script>
-  // Landing -> First Section
-  const landing = document.getElementById('landing');
-  const enterBtn = document.getElementById('enterBtn');
-  const sections = document.querySelectorAll('section');
-  let currentSection = 0;
-
-  enterBtn.onclick = () => {
-    landing.style.display = 'none';
-    sections[currentSection].style.display = 'flex';
+function checkPass() {
+  const pass = document.getElementById("password").value;
+  if (pass.toLowerCase() === "i love you") {
+    show("loading");
+    fakeLoad();
+  } else {
+    alert("Wrong password 😜");
   }
+}
 
-  // Floating Hearts
-  for(let i=0;i<30;i++){
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.style.left = Math.random()*100 + 'vw';
-    heart.style.animationDuration = (4 + Math.random()*3) + 's';
-    heart.style.width = heart.style.height = (10 + Math.random()*20) + 'px';
-    document.body.appendChild(heart);
-  }
+function show(id) {
+  document.querySelectorAll(".container").forEach(c => c.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
 
-  // Slideshow
-  const slides = document.querySelectorAll('.slide');
-  let slideIndex = 0;
-  document.getElementById('nextSlide').onclick = () => {
-    slides[slideIndex].classList.remove('active');
-    slideIndex = (slideIndex+1)%slides.length;
-    slides[slideIndex].classList.add('active');
-    nextSection();
-  }
-
-  // Move to next section
-  function nextSection(){
-    sections[currentSection].style.display = 'none';
-    currentSection++;
-    if(currentSection<sections.length){
-      sections[currentSection].style.display = 'flex';
+function fakeLoad() {
+  const texts = [
+    "Fetching love 💕",
+    "Adding hugs 🤗",
+    "Packing kisses 😘",
+    "Almost there 💖"
+  ];
+  let i = 0;
+  const interval = setInterval(() => {
+    document.getElementById("loadText").innerText = texts[i];
+    i++;
+    if (i === texts.length) {
+      clearInterval(interval);
+      setTimeout(() => show("quiz"), 800);
     }
-  }
+  }, 900);
+}
 
-  // Balloons
-  const balloonsContainer = document.getElementById('balloonsContainer');
-  const balloonMessages = ["I ❤️ you", "Miss you", "You are amazing", "Hugs!", "Forever us"];
-  for(let i=0;i<10;i++){
-    const balloon = document.createElement('div');
-    balloon.textContent = "🎈";
-    balloon.style.fontSize = (30+Math.random()*30)+'px';
-    balloon.style.position = 'absolute';
-    balloon.style.top = (Math.random()*80)+'%';
-    balloon.style.left = (Math.random()*80)+'%';
-    balloon.style.cursor = 'pointer';
-    balloon.onclick = () => {
-      const msg = balloonMessages[Math.floor(Math.random()*balloonMessages.length)];
-      alert(msg);
-      balloon.remove();
-    };
-    balloonsContainer.appendChild(balloon);
-  }
+function nextStep(id) {
+  show(id);
+}
 
-  // Secret Message
-  document.getElementById('unlockBtn').onclick = () => {
-    const pwd = document.getElementById('pwdInput').value;
-    if(pwd.toLowerCase() === 'i love you'){
-      document.getElementById('secretMsg').style.display = 'block';
-      nextSection();
-    } else {
-      alert('Try again 💖');
-    }
-  }
-
-  // Countdown
-  const countdownEl = document.getElementById('countdown');
-  const targetDate = new Date();
-  targetDate.setDate(targetDate.getDate() + 7); // 7 days from now
-  function updateCountdown(){
-    const now = new Date();
-    const diff = targetDate - now;
-    const days = Math.floor(diff/(1000*60*60*24));
-    const hours = Math.floor((diff/(1000*60*60))%24);
-    const mins = Math.floor((diff/1000/60)%60);
-    const secs = Math.floor((diff/1000)%60);
-    countdownEl.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
-    if(diff<=0) countdownEl.textContent = "🎉 Time to Celebrate! 🎉";
-  }
-  setInterval(updateCountdown, 1000);
-
-  document.getElementById('celebrateBtn').onclick = () => {
-    alert("🎉 Happy Moments Ahead! 🎉");
-  }
-
+// Hearts
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = (15 + Math.random() * 20) + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
+}, 400);
 </script>
 
 </body>
